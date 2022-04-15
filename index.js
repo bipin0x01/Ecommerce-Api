@@ -12,7 +12,7 @@ module.exports={databaseEcommerce}
  */
 app.use(express.urlencoded({extended:true}))
 app.use(express.json())
-
+app.use(express.static("./public"))
 
 
 /**
@@ -20,8 +20,10 @@ app.use(express.json())
 */
 app.use("/user",require("./routes/users/user").router)
 app.use("/cart",require("./routes/cart/cart").router)
-app.use("/products",require("./routes/products/product").router)
+app.use("/product",require("./routes/products/product").router)
 app.use("/order",require("./routes/order/order").router)
+app.use("/staff",require("./routes/staffs/staff").router)
+app.use("/delivery",require("./routes/delivery/delivery").router)
 
 
 

@@ -71,7 +71,7 @@ router.get("/",async (req,res)=>{
             return
         }
         catch(err){
-            res.json(err)
+            res.json({"status":"error","message":err.data})
             return
         }
     }
@@ -117,7 +117,6 @@ router.get("/",async (req,res)=>{
  * Sends matched id product information 
  */
 router.get("/single-product",async (req,res)=>{
-    console.log(req.query)
     try{
         let productData=await databaseEcommerce.findById(req.query._id,{},productModel)
         res.json({"status":"success",message:productData.data[0]})
@@ -145,7 +144,10 @@ router.get("/search/:id",async (req,res)=>{
 })
 
 
-
+/**
+ * Get request handler for all-category
+ * Sends category of product
+ */
 router.get("/all-category",async(req,res)=>{
     try{
         let productData=await databaseEcommerce.fetchDatabase({},{_id:0,category:1},productModel)
@@ -167,9 +169,12 @@ router.get("/all-category",async(req,res)=>{
  * Adds to the database
  */
 router.post("/add",AuthToken.jwtAuthentication,multerMiddleWare,Validator.validateProduct,async (req,res,next)=>{
+    if(req.user.role!="admin" || req.user.role==undefined){
+        res.status(204).json({"status":"failure","message":"Only accessed from admin"})
+    }
     try{
         await databaseEcommerce.saveToModel(req.product,productModel)
-        res.status(204).json({"status":"Succes","message":"Product added to database"})
+        res.status(200).json({"status":"Succes","message":"Product added to database"})
     }
     catch(err){
         res.status(503).json({"status":"error","message":"Error occured try again"})

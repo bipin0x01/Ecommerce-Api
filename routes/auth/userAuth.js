@@ -2,7 +2,7 @@ require("dotenv").config()
 const path=require("path")
 const express=require("express")
 const router=express.Router()
-const {databaseEcommerce}=require("../.././index")
+const {databaseEcommerce}=require("../../index")
 const jwt=require("jsonwebtoken")
 const axios=require("axios")
 let userModel= require("../users/user").userModel
@@ -10,6 +10,7 @@ const querystring=require("querystring")
 const {Validator}=require("../../middleware/middleware")
 const bcrypt=require("bcrypt")
 const saltRound=10
+const fs=require("fs")
 
 /** 
  * Multer module to parse multipart/form-data
@@ -73,6 +74,7 @@ router.post("/register",multerMiddleWare,Validator.validateUserData,async (req,r
     try{
         userData=await databaseEcommerce.findOrCreate({username:req.userData.username},req.userData,{},userModel)
         if(userData.msg=="User Found"){
+            fs.unlink(path.join("./public/images/users",req.file.filename),(err)=>{})
             res.status(403).json({"failed":"user exists"})
             return
         }
@@ -136,6 +138,7 @@ router.get("/google/config",async (req,res)=>{
         let payload={
             username:profile.data.id,
             email:profile.data.email,
+            role:"user",
             profile:{
                 fName:profile.data.given_name,
                 lName:profile.data.family_name,
@@ -150,7 +153,8 @@ router.get("/google/config",async (req,res)=>{
             res.json({accessToken:token})
         }
         else if(databaseHandlerReply.msg=="User Created"){
-            res.status(201).json({"success":"User Created"})
+            const token=jwt.sign(payload,process.env.JWT_SECRET)
+            res.json({"success":"User Created",accessToken:token})
         }
 
     }
@@ -192,6 +196,7 @@ router.post("/login",async (req,res)=>{
     const password=req.body.password
     if(username==undefined || password==undefined) {
         res.status(403).json({"status":"error","message":"No username or password"})
+        return
     }
     try{
         userInformation=await databaseEcommerce.fetchDatabase({username:username},{},userModel)
@@ -199,9 +204,12 @@ router.post("/login",async (req,res)=>{
             let payload={
                 username:userInformation.data[0].username,
                 email:userInformation.data[0].email,
-                isAdmin:userInformation.data[0].isAdmin,
-                fname:userInformation.data[0].profile.fname,
-                lname:userInformation.data[0].profile.lname
+                role:userInformation.data[0].role,
+                profile:{
+                    fName:userInformation.data[0].profile.fName,
+                    lName:userInformation.data[0].profile.lName,
+                    avatar:userInformation.data[0].profile.avatar
+                }
             }
             const token=jwt.sign(payload,process.env.JWT_SECRET)
             res.json({accessToken:token})

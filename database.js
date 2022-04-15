@@ -65,14 +65,14 @@ class DatabaseMongo extends mongoose.Mongoose{
         }
     }
 
-    fetchDatabase(query,options,databaseModel){
+    fetchDatabase(projection,options,databaseModel){
         return new Promise((resolve,reject)=>{
-            databaseModel.find(query,options,{},(err,result)=>{
+            databaseModel.find(projection,options,{},(err,result)=>{
                 if(result[0]!=undefined){
                     resolve({message:"Success",data:result})
                 }
                 else{
-                    reject({message:"Error",data:"null"})
+                    reject({message:"Error",data:"data not found"})
                 }
             })
         })    
@@ -84,8 +84,11 @@ class DatabaseMongo extends mongoose.Mongoose{
                 if(result[0]!=undefined){
                     resolve({message:"Success",data:result})
                 }
-                else{
-                    reject({message:"Error",data:"null"})
+                else if(err){
+                    reject({message:"Error",data:err})
+                }
+                else {
+                    reject({message:"Error",data:"product not found"})
                 }
             })
         })

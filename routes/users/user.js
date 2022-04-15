@@ -9,7 +9,13 @@ module.exports={
     userModel
 }
 
-router.use("/auth",require("../auth/index"))
+
+
+/**
+ * Middleware to handle all authentication for user
+ * Include google oauth2
+ */
+router.use("/auth",require("../auth/userAuth"))
 
 router.get("/dashboard",AuthToken.jwtAuthentication,async (req,res)=>{
     console.log(req.user.username)
@@ -18,7 +24,7 @@ router.get("/dashboard",AuthToken.jwtAuthentication,async (req,res)=>{
         res.json({"status":"success",message:userData.data[0]})
     }
     catch(err){
-        res.json({"status":"failure","message":err})
+        res.json({"status":"failure","message":err.data})
     }
 })
 

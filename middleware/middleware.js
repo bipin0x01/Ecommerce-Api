@@ -51,34 +51,77 @@ AuthToken.jwtAuthentication=(req,res,next)=>{
  * If not valid deletes the images of user and sends responce
  */
 Validator.validateUserData=(req,res,next)=>{
-    const re=/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-    var invalid=""
-    if(req.body.username==undefined || req.body.username.indexOf(" ")!=-1 || req.body.username<6) invalid+="Username should be more then 6 character long with no white space.\n"
-    if (req.body.password==undefined || req.body.password.length<7) invalid+="Password must be >=7 character long\n"
-    if(req.body.email==undefined || !re.test(req.body.email.toLowerCase())) invalid+="Invalid Email\n"
-    if(!req.body.fname) invalid+="No First Name Entered\n"
-    if(!req.body.lname) invalid+="No Last Name Entered\n"
-    if (invalid!=""){
-        if(req.file.filename!=undefined) fs.unlink(path.join("./public/images",req.file.filename),(err)=>{
-        })
-        res.status(401).json({"status":"Faild","message":invalid})
-        return   
-    }
-    const hashPassword=bcrypt.hashSync(req.body.password,saltRound)
-    let data={
-        username:req.body.username,
-        password:hashPassword,
-        email:req.body.email,
-        role:"user",
-        profile:{
-            fName:req.body.fname,
-            lName:req.body.lname,
-            avatar:(req.file.filename==undefined)?"":req.file.filename
+    try{
+        const re=/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        var invalid=""
+        if(req.body.username==undefined || req.body.username.indexOf(" ")!=-1 || req.body.username<6) invalid+="Username should be more then 6 character long with no white space.\n"
+        if (req.body.password==undefined || req.body.password.length<7) invalid+="Password must be >=7 character long\n"
+        if(req.body.email==undefined || !re.test(req.body.email.toLowerCase())) invalid+="Invalid Email\n"
+        if(!req.body.fname) invalid+="No First Name Entered\n"
+        if(!req.body.lname) invalid+="No Last Name Entered\n"
+        if (invalid!=""){
+            if(req.file.filename!=undefined) fs.unlink(path.join("./public/images/users",req.file.filename),(err)=>{
+            })
+            res.status(401).json({"status":"Faild","message":invalid})
+            return   
         }
+        const hashPassword=bcrypt.hashSync(req.body.password,saltRound)
+        let data={
+            username:req.body.username,
+            password:hashPassword,
+            email:req.body.email,
+            role:"user",
+            profile:{
+                fName:req.body.fname,
+                lName:req.body.lname,
+                avatar:(req.file.filename==undefined)?"":req.file.filename
+            }
+        }
+        req.userData=data
+        next()
     }
-    req.userData=data
-    next()
+    catch(err){
+        res.json({"status":"failure","message":"multipart/form-data required"})
+    }
 }
+
+
+/**
+ * method to validate information for registering Staffs 
+ * If not valid deletes the images of staffs and sends responce
+ */
+ Validator.validateStaffsData=(req,res,next)=>{
+
+        const re=/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        var invalid=""
+        if(req.body.username==undefined || req.body.username.indexOf(" ")!=-1 || req.body.username<6) invalid+="Username should be more then 6 character long with no white space.\n"
+        if (req.body.password==undefined || req.body.password.length<7) invalid+="Password must be >=7 character long\n"
+        if(req.body.email==undefined || !re.test(req.body.email.toLowerCase())) invalid+="Invalid Email\n"
+        if(req.body.address==undefined || !re.test(req.body.email.toLowerCase())) invalid+="Invalid address\n"
+        if(req.body.contactNumber==undefined || !/\+977 \d\d\d\d\d\d\d\d\d\d/.test(req.body.contactNumber)) invalid+="Not valid phone number.\n"
+        if(!req.body.fname) invalid+="No First Name Entered\n"
+        if(!req.body.lname) invalid+="No Last Name Entered\n"
+        if (req.file==undefined || req.file.filename==undefined) invalid+="No image included.\n"
+        if (invalid!=""){
+            if(req.file.filename!=undefined) fs.unlink(path.join("./public/images/staffs",req.file.filename),(err)=>{})
+            res.status(401).json({"status":"Faild","message":invalid})
+            return   
+        }
+        const hashPassword=bcrypt.hashSync(req.body.password,saltRound)
+        let data={
+            username:req.body.username,
+            password:hashPassword,
+            email:req.body.email,
+            profile:{
+                fName:req.body.fname,
+                lName:req.body.lname,
+                avatar:(req.file.filename==undefined)?"":req.file.filename
+            }
+        }
+        req.userData=data
+        next()
+}
+
 
 
 
@@ -87,7 +130,7 @@ Validator.validateUserData=(req,res,next)=>{
  * If not valid deletes the images of product and sends responce
  */
 Validator.validateProduct=(req,res,next)=>{
-    if(Boolean(req.user.isAdmin)!=true) {
+    if(req.user.role!="admin") {
         res.status(403).json({"status":"error","message":"Only access by admin"})
         return
     }
@@ -115,7 +158,7 @@ Validator.validateProduct=(req,res,next)=>{
             productName:req.body.productName.toLowerCase(),
             desc:req.body.productDescription,
             category:req.body.category.toLowerCase(),
-            subCategory:req.body.subCategory.toLowerCase(),
+            subCategory:(req.body.subCategory!=undefined)?req.body.subCategory.toLowerCase():"",
             stock:Number(req.body.stock),
             price:Number(req.body.price),
             images:images
