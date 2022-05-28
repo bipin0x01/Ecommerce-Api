@@ -1,0 +1,89 @@
+.header{
+    display: flex;
+    padding: 10px;
+}
+
+.header_left{
+    display: flex;
+    flex: 0.7;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.app_logo{
+    width: 125px;
+}
+
+.header_search{
+    display: flex;
+    background-color: white;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.input_suggestion{
+    width: 85%;
+    position: relative;
+}
+
+.header_search input{
+    background-color: white;
+    font-size: 1.05rem;
+    border: none;
+    padding: 10px;
+    width: 90%;
+}
+
+.suggestions{
+    position: absolute;
+    width: 100%;
+    top: 109%;
+    left: 1;
+    background-color:white;
+}
+
+.suggestions > p{
+    cursor: pointer;
+    padding: 10px;
+    text-align: left;
+}
+
+.suggestions > p:hover{
+    background-color: rgba(128, 128, 128, 0.205);
+}
+
+
+
+.header_search input:focus{
+    outline: none;
+}
+
+.header_inputs{
+    background-color: white;
+    width: 70%;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.avatar_nav{
+    position: relative;
+}
+
+.avatar_dropdown{
+    position: absolute;
+    background-color: white;
+    border-radius: 5px;
+    top: 150%;
+    left: 0;
+    width: 10em;
+}
+
+.avatar_dropdown p{
+    cursor: pointer;
+    padding: 10px;
+    text-align: left;
+}
+
+.avatar_dropdown p:hover{
+    background-color: rgba(128, 128, 128, 0.205);
+}

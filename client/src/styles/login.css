@@ -1,0 +1,229 @@
+*{
+    margin: 0px;
+    padding: 0px;
+}
+
+body{
+    text-align: center;
+    background-color: #E7E7E7;
+}
+
+
+.login-container{
+    width: 90vw;
+    height: 100vh;
+    margin: auto;
+    position: relative;
+    text-align: center;
+    display: flex;
+    align-items: center;
+}
+
+
+.login-card{
+    display: flex;
+    width: 40%;
+    padding: 20px 50px;
+    margin: auto;
+    background: url("./../../public/logo.png") no-repeat;
+    background-position: 450px 100px;
+    background-color: white;
+    animation: login-logo 5s alternate cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
+    flex-direction: column;
+}
+
+.login-content{
+    padding: 10px;
+}
+
+.login-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.login-header p{
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 2rem;
+    color: black;
+    font-weight: 600;
+}
+
+.login-header button{
+    height: 40px;
+    border-radius: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    width: 40px;
+    border: none;
+    box-shadow: 0px 0px 5px 0px #A3A3A3;
+}
+
+.login-oauth-section{
+    margin-top: 10px;
+    display: flex;
+    text-align: left;
+}
+
+.oauth-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    width: 50%;
+    box-shadow: 0px 0px 5px 0px #A3A3A3;
+    border-radius: 10px;
+
+}
+
+.oauth-container:hover{
+    cursor: pointer;
+    box-shadow: 0px 0px 5px 2px #A3A3A3;
+}
+
+.oauth-container span{
+    font-size: 1.2rem;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    margin-left: 10px;
+}
+
+.login-content hr{
+    margin: 20px;
+    border: none;
+    border-top: 1px solid #A3A3A3 ;
+    border-radius: 10px;
+}
+
+.login-form{
+    margin-top: 20px;
+}
+
+.input-label{
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    margin:10px auto;
+}
+
+.input-label p{
+    margin-bottom: 5px;
+    font-size: 1.5rem;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-weight: 600;
+}
+
+.form-input{
+    width: 50%;
+    font-size: 1.2rem;
+    padding: 10px;
+    box-shadow: 0px 0px 2px 0px #A3A3A3;
+    border-radius: 5px;
+    border: 1px solid transparent;
+    margin-bottom: 2px;
+}
+
+.form-input:focus{
+    outline:  none;
+    box-shadow: 0px 0px 10px 2px #ACD0F6;
+    border: 1px solid #ACD0F6;
+
+}
+
+.input-label span{
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.login-submit-button{
+    width: 50%;
+    font-size: 1.5rem;
+    background-color: #1865F2;
+    color: white;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-weight: 500;
+    transition: all 0.2s ease-in;
+}
+
+.login-submit-button:hover{
+    box-shadow: 0px 0px 10px 3px #ACD0F6;
+}
+
+
+.login-footer p{
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 1.1rem;
+}
+
+
+.login-footer span{
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    text-decoration: underline;
+    color: #1865F2;
+}
+
+.login-form > p{
+    font-size: 1.1rem;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-weight: 500;
+    text-decoration: underline;
+    color: #1865F2;
+    cursor: pointer;
+    text-align: left;
+}
+
+
+@media only screen and (max-width:1110px){
+    .login-card{
+        display: flex;
+        width: 80%;
+        padding: 20px;
+        margin: auto;
+        background-color: white;
+        background-image: none;
+        flex-direction: column;
+    }
+
+    .login-content{
+        width: 100%;
+    }
+
+    .login-oauth-section{
+        margin-top: 80px;
+        display: flex;
+        text-align: center;
+    }
+
+    .form-input{
+        margin: 10px auto;
+        width: 85%;
+    }
+
+    .oauth-container{
+        width: 85%;
+        margin: 10px auto;
+    }
+
+    .login-form > p{
+        text-align: center;
+    }
+    
+}
+
+@keyframes login-logo {
+
+    from{
+        background-position: 450px 100px;
+
+    }
+    to{
+        background-position: 450px 250px;
+    }
+    
+}
+
+.login-toast{
+    background-color: #1865F2;
+}
